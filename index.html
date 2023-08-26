@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport    " content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        const apikey =  '085b549f76a7592692ce24f9e0bac9e1';
+        var apiurl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&q=';
+        async function checkW(pass)
+        {
+            const response = await fetch(apiurl + pass + '&appid=' + apikey );
+            if(response.status==404)
+            {
+                console.log('error city name');
+                document.querySelector('.error').style.display = 'block';
+                document.querySelector('.weather').style.display = 'none';
+                document.querySelector('.details').style.display = 'none'; 
+            }
+            else
+            {
+                document.getElementsByClassName('error')[0].style.display = 'none';
+            var data = await response.json();
+            console.log(data);
+            document.querySelector('.cityname').textContent = data.name;
+            document.querySelector('.temp').textContent = Math.round(data.main.temp) + '°C';
+            document.querySelector('.humidity').textContent = data.main.humidity + '%';
+            document.querySelector('.wind').textContent = data.wind.speed + 'km/hour';
+
+            if(data.weather[0].main=='Clouds')
+            {
+                console.log("its Clouds");
+                document.getElementsByClassName('weather_icon')[0].src="images/clouds.png"
+            }
+            else if(data.weather[0].main=='Clear')
+            {
+                console.log("its Clear");
+                document.getElementsByClassName('weather_icon')[0].src="images/clear.png"
+            }
+            else if(data.weather[0].main=='Mist')
+            {
+                console.log("its Mist");
+                document.getElementsByClassName('weather_icon')[0].src="images/mist.png"
+            }
+            else if(data.weather[0].main=='Drizzle')
+            {
+                console.log("its Drizzle");
+                document.getElementsByClassName('weather_icon')[0].src="images/drizzle.png"
+            }
+            else if(data.weather[0].main=='Rain')
+            {
+                console.log("its Rain");
+                document.getElementsByClassName('weather_icon')[0].src="images/rain.png"
+            }
+            document.querySelector('.error').style.display = 'none';
+            document.querySelector('.weather').style.display = 'block';
+            document.querySelector('.details').style.display = 'flex'; 
+            }
+        }
+        // checkW('howrah');
+        function func()
+        {
+            var cityN = document.querySelector('.search input').value;
+            console.log(cityN);
+            checkW(cityN);  
+        }
+    </script>
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" spellcheck="false" placeholder="Enter City Name" >
+            <button onclick="func()"><img src="/images/search.png" alt=""></button>
+        </div>
+        <div class="error">
+            <p>Invalid City Name</p>
+        </div>
+        <div class="weather">
+            <img src="images/rain.png" alt="" class="weather_icon">
+            <h1 class="temp">22°C</h1>
+            <h2 class="cityname">New Delhi</h2>
+        </div>
+
+        <div class="details">
+            <div class="col">
+                <img src="images/humidity.png" alt="">
+                <div>
+                    <p class="humidity">50%</p>
+                    <p>Humidity</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <img src="images/wind.png" alt="">
+                <div>
+                    <p class="wind">15 Km/Hr</p>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
